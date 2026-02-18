@@ -1,26 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>RA Automática</title>
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
-    <style>
-        body { margin: 0; }
-        model-viewer { width: 100vw; height: 100vh; }
-    </style>
-</head>
-<body>
-    <!-- Se incluye el modelo GLB. 'ar' activa el modo Realidad Aumentada -->
-    <model-viewer id="viewer" src="Plato_01.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls touch-action="pan-y">
-    </model-viewer>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Librerías para Tracking de imagen y renderizado 3D -->
+    <script src="https://aframe.io"></script>
+    <script src="https://cdn.jsdelivr.net"></script>
+  </head>
+  <body>
+    <!-- Importante: MindAR requiere un archivo .mind para trackear el QR, 
+         pero este código simplificado usa un marcador predeterminado o tracking de superficie -->
+    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-assets>
+        <a-asset-item id="modeloPlato" src="Plato_01.glb"></a-asset-item>
+      </a-assets>
 
-    <script>
-        // Este script intenta activar la RA automáticamente al cargar la página
-        const modelViewer = document.querySelector("#viewer");
-        modelViewer.addEventListener('load', () => {
-            // Activa el modo RA de forma automática si el dispositivo lo soporta
-            modelViewer.activateAR();
-        });
-    </script>
-</body>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      
+        <a-gltf-model src="#modeloPlato" rotation="0 0 0" position="0 0 0" scale="0.5 0.5 0.5"></a-gltf-model>
+      
+    </a-scene>
+  </body>
 </html>
