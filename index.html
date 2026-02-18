@@ -18,7 +18,10 @@
         <p id="msg">Cargando componentes...</p>
     </div>
 
-    <a-scene vr-mode-ui="enabled: false;" renderer="logarithmicDepthBuffer: true; colorManagement: true;" embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+    <a-scene 
+    embedded 
+    arjs="sourceType: webcam; videoSettings: { facingMode: 'environment' }; debugUIEnabled: false;"
+    renderer="logarithmicDepthBuffer: true; colorManagement: true;">
         
         <a-nft id="tracker" type="nft" url="" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
             
