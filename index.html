@@ -4,38 +4,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>AR Plato Tracked</title>
-    <!-- Librerías de confianza para tracking de imagen -->
+    <!-- Usamos versiones específicas que sabemos que no fallan en móviles -->
     <script src="https://aframe.io"></script>
     <script src="https://raw.githack.com"></script>
+    
     <style>
-        .arjs-loader { height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: black; z-index: 9999; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
-        #start-button { margin-top: 20px; padding: 15px 30px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        .arjs-loader { height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
+        #start-button { margin-top: 20px; padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 
 <body style="margin: 0px; overflow: hidden;">
-    <!-- Pantalla de carga y permiso de cámara -->
+    <!-- Pantalla de carga -->
     <div id="loader" class="arjs-loader">
-        <div>Cargando modelo 3D...</div>
-        <button id="start-button">INICIAR EXPERIENCIA</button>
+        <div id="status">Cargando motor AR...</div>
+        <button id="start-button">ACTIVAR CÁMARA Y MODELO</button>
     </div>
 
+    <!-- La escena AR -->
     <a-scene
         vr-mode-ui="enabled: false;"
         renderer="logarithmicDepthBuffer: true; colorManagement: true; antialias: true;"
         embedded
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
 
-        <!-- NFT: Aquí es donde he puesto 'QRtest' que vincula tus 3 archivos -->
+        <!-- AQUÍ ESTÁ EL CAMBIO: La ruta con 'QRtest' al final -->
         <a-nft
             type="nft"
-            url="https://croblexvfx-hub.github.io"
+            url="https://croblexvfx-hub.github.io/QRtest"
             smooth="true"
             smoothCount="10"
             smoothTolerance=".01"
             smoothThreshold="5">
             
-            <!-- Tu modelo Plato_01.glb con escala ajustada para NFT -->
             
             
         </a-nft>
@@ -46,8 +47,22 @@
     <script>
         const btn = document.getElementById('start-button');
         const loader = document.getElementById('loader');
-        btn.addEventListener('click', () => {
+        
+        btn.addEventListener('click', function() {
+            // Esto fuerza al navegador a pedir permiso de cámara si no lo ha hecho
+            const scene = document.querySelector('a-scene');
+            scene.addEventListener('loaded', () => {
+                console.log('Escena cargada');
+            });
+            
+            // Ocultamos el cargador
             loader.style.display = 'none';
+            
+            // Forzamos el inicio del video en iOS/Android
+            const video = document.querySelector('video');
+            if (video) {
+                video.play();
+            }
         });
     </script>
 </body>
