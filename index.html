@@ -2,52 +2,41 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>AR Plato Final</title>
+    <title>Visor AR Plato</title>
     <script src="https://aframe.io"></script>
     <script src="https://raw.githack.com"></script>
-    <style>
-        #loader { position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
-        #btn { padding: 25px 50px; background: #28a745; color: white; border: none; border-radius: 15px; font-weight: bold; font-size: 20px; cursor: pointer; }
-    </style>
 </head>
-
 <body style="margin: 0; overflow: hidden;">
-    <div id="loader">
-        <button id="btn" onclick="iniciarAR()">INICIAR AHORA</button>
-        <p id="status" style="margin-top:20px">Esperando interacción...</p>
+    <div id="setup" style="position: fixed; z-index: 999; width: 100%; height: 100%; background: #222; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: sans-serif;">
+        <button id="go" style="padding: 20px 40px; font-size: 20px; background: #28a745; color: white; border: none; border-radius: 10px;">VER PLATO EN 3D</button>
+        <p id="debug" style="margin-top: 20px; color: #aaa;">Estado: Esperando clic</p>
     </div>
 
-    <a-scene embedded vr-mode-ui="enabled: false;" renderer="logarithmicDepthBuffer: true; colorManagement: true;" arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-        
-        <a-nft id="tracker" type="nft" url="" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+    <a-scene embedded vr-mode-ui="enabled: false;" arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+        <a-nft id="ntf-marker" type="nft" url="" smooth="true">
             
         </a-nft>
-
         
     </a-scene>
 
     <script>
-        function iniciarAR() {
-            console.log("Iniciando...");
-            const loader = document.getElementById('loader');
-            const tracker = document.getElementById('tracker');
-            const modelo = document.getElementById('modelo');
-            
-            // CONFIGURA AQUÍ TU URL MANUALMENTE SI EL CHAT LA RECORTA:
-            const repoURL = "https://croblexvfx-hub.github.io";
-            
-            tracker.setAttribute('url', repoURL + "QRtest");
-            modelo.setAttribute('gltf-model', "url(" + repoURL + "Plato_01.glb)");
-
-            loader.style.display = 'none';
-            
-            // Forzar encendido de cámara
-            const scene = document.querySelector('a-scene');
-            if (scene.hasLoaded) {
-                document.querySelector('video').play();
+        // ESTA PARTE ES LA QUE DEBES EDITAR CON CUIDADO
+        const nombreUsuario = "croblexvfx-hub";
+        const nombreRepo = "mi-modelo-3d-track";
+        
+        document.getElementById('go').onclick = function() {
+            try {
+                const base = "https://" + nombreUsuario + ".github.io/" + nombreRepo + "/";
+                
+                document.getElementById('ntf-marker').setAttribute('url', base + "QRtest");
+                document.getElementById('plato-modelo').setAttribute('gltf-model', "url(" + base + "Plato_01.glb)");
+                
+                document.getElementById('setup').style.display = 'none';
+                document.getElementById('debug').innerText = "Cargando cámara...";
+            } catch (e) {
+                alert("Error en el código: " + e);
             }
-        }
+        };
     </script>
 </body>
 </html>
