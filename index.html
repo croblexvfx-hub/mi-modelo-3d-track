@@ -3,40 +3,49 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Plato AR Final</title>
-    <!-- Cargamos A-Frame (Incluye el motor 3D internamente) -->
-    <script src="https://aframe.io"></script>
-    <!-- Librería de Realidad Aumentada simplificada -->
+    <title>Visor Plato AR</title>
+    <!-- Usamos la librería AR.js cargada desde un servidor alternativo -->
+    <script src="https://cdn.jsdelivr.net"></script>
     <script src="https://raw.githack.com"></script>
 </head>
+<body style="margin: 0; overflow: hidden; background: #000;">
 
-<body style="margin: 0px; overflow: hidden;">
-    <!-- Botón de inicio para activar cámara -->
-    <div id="u" style="position: fixed; z-index: 9999; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center;">
-        <button onclick="document.getElementById('u').style.display='none';" style="padding: 20px 40px; font-size: 20px; background: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer;">
-            VER PLATO EN MI MESA
+    <div id="u" style="position: fixed; z-index: 10000; width: 100%; height: 100%; background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: sans-serif;">
+        <button id="b" style="padding: 20px 40px; font-size: 20px; background: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;">
+            ACTIVAR CÁMARA
         </button>
+        <p style="margin-top: 20px; color: #888;">Si ves negro, pulsa los 3 puntos y 'Abrir en Chrome'</p>
     </div>
 
-    <!-- Escena AR configurada para rastreo de marcador Hiro -->
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded vr-mode-ui="enabled: false" arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_color; sourceOption: { facingMode: 'environment' };">
         
         <a-assets>
-            <!-- Cargamos tu modelo de GitHub -->
-            <a-asset-item id="modeloPlato" src="Plato_01.glb"></a-asset-item>
+            <a-asset-item id="p" src="Plato_01.glb"></a-asset-item>
         </a-assets>
 
-        <!-- Usamos el marcador Hiro por ser el más estable del mundo -->
+        <!-- Marcador HIRO (El más estable) -->
         <a-marker preset="hiro">
-            <!-- El plato aparecerá aquí -->
             
-            
-            
-            <!-- Plan B: Una caja por si el GLB no carga, para saber que el AR funciona -->
-            <a-box position="0 0.5 0" material="opacity: 0.5; color: #28a745;" scale="0.2 0.2 0.2"></a-box>
+            <a-box position="0 0.5 0" material="opacity: 0.5; color: #ff0000;" scale="0.2 0.2 0.2"></a-box>
         </a-marker>
 
         
     </a-scene>
+
+    <script>
+        document.getElementById('b').onclick = function() {
+            // Ocultar capa de inicio
+            document.getElementById('u').style.display = 'none';
+            
+            // Forzar encendido de cámara mediante API nativa
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(function(s) {
+                    console.log("Cámara iniciada");
+                })
+                .catch(function(e) {
+                    alert("Error cámara: " + e);
+                });
+        };
+    </script>
 </body>
 </html>
