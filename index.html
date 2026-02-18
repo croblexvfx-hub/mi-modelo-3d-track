@@ -4,34 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>AR Plato Final</title>
-    <!-- Librerías actualizadas a versiones 2024/2025 -->
     <script src="https://aframe.io"></script>
     <script src="https://raw.githack.com"></script>
     <style>
-        .arjs-loader { position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
-        #btn { padding: 20px 40px; background: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; position: relative; z-index: 1000; }
+        #loader { position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
+        #btn { padding: 25px 50px; background: #28a745; color: white; border: none; border-radius: 15px; font-weight: bold; font-size: 20px; cursor: pointer; }
     </style>
 </head>
 
 <body style="margin: 0; overflow: hidden;">
-    <div id="loader" class="arjs-loader">
-        <button id="btn">ACTIVAR CÁMARA Y MODELO</button>
-        <p style="margin-top:15px">Si ves negro tras pulsar, espera 5 segundos...</p>
+    <div id="loader">
+        <button id="btn" onclick="iniciarAR()">INICIAR AHORA</button>
+        <p id="status" style="margin-top:20px">Esperando interacción...</p>
     </div>
 
-    <a-scene
-        embedded
-        vr-mode-ui="enabled: false;"
-        renderer="logarithmicDepthBuffer: true; colorManagement: true;"
-        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false; sourceOption: { facingMode: 'environment' };">
-
-        <a-nft
-            id="tracker"
-            type="nft"
-            url=""
-            smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
-            
-            
+    <a-scene embedded vr-mode-ui="enabled: false;" renderer="logarithmicDepthBuffer: true; colorManagement: true;" arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+        
+        <a-nft id="tracker" type="nft" url="" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
             
         </a-nft>
 
@@ -39,25 +28,26 @@
     </a-scene>
 
     <script>
-        // Re-construcción de la URL para evitar el recorte del sistema
-        const u = "https://" + "croblexvfx-hub" + ".github.io" + "/mi-modelo-3d-track/";
-        
-        document.getElementById('btn').addEventListener('click', function() {
-            // Seteamos las rutas antes de ocultar el loader
-            document.getElementById('tracker').setAttribute('url', u + "QRtest");
-            document.getElementById('modelo').setAttribute('gltf-model', "url(" + u + "Plato_01.glb)");
+        function iniciarAR() {
+            console.log("Iniciando...");
+            const loader = document.getElementById('loader');
+            const tracker = document.getElementById('tracker');
+            const modelo = document.getElementById('modelo');
             
-            document.getElementById('loader').style.display = 'none';
+            // CONFIGURA AQUÍ TU URL MANUALMENTE SI EL CHAT LA RECORTA:
+            const repoURL = "https://croblexvfx-hub.github.io";
             
-            // Intento de forzar la cámara mediante API de MediaDevices
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(function(stream) {
-                    console.log("Cámara activa");
-                })
-                .catch(function(err) {
-                    alert("Error cámara: Asegúrate de dar permisos en los ajustes de Chrome");
-                });
-        });
+            tracker.setAttribute('url', repoURL + "QRtest");
+            modelo.setAttribute('gltf-model', "url(" + repoURL + "Plato_01.glb)");
+
+            loader.style.display = 'none';
+            
+            // Forzar encendido de cámara
+            const scene = document.querySelector('a-scene');
+            if (scene.hasLoaded) {
+                document.querySelector('video').play();
+            }
+        }
     </script>
 </body>
 </html>
