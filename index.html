@@ -1,51 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visor Plato AR</title>
-    <!-- Librería oficial de Google -->
-    <script type="module" src="https://ajax.googleapis.com"></script>
-    <style>
-        body { margin: 0; background-color: #f0f0f0; font-family: sans-serif; }
-        model-viewer { width: 100vw; height: 100vh; --poster-color: transparent; }
-        .controles { position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center; z-index: 10; }
-        button { padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-    </style>
+    <meta charset="utf-8">
+    <title>Visor Plato 3D</title>
+    <!-- Librerías de máxima compatibilidad -->
+    <script src="https://aframe.io"></script>
+    <script src="https://raw.githack.com"></script>
 </head>
-<body>
+<body style="margin: 0px; overflow: hidden;">
+    <!-- Botón simple para forzar el inicio -->
+    <div id="capa" style="position: fixed; z-index: 10; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center;">
+        <button onclick="document.getElementById('capa').style.display='none';" style="padding: 20px; font-size: 18px; cursor: pointer;">
+            ACTIVAR CÁMARA
+        </button>
+    </div>
 
-    <!-- 
-      - 'ar-modes' prioriza Scene Viewer (Android) y Quick Look (iOS)
-      - 'shadow-intensity' y 'environment-image' ayudan a la consistencia visual
-    -->
-    <model-viewer id="visor" 
-        src="Plato_01.glb" 
-        ar 
-        ar-modes="scene-viewer quick-look webxr" 
-        camera-controls 
-        touch-action="pan-y"
-        shadow-intensity="1" 
-        exposure="1"
-        environment-image="neutral">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <a-assets>
+            <a-asset-item id="plato" src="Plato_01.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- El ancla: Apunta al Marcador Hiro -->
+        <a-marker preset="hiro">
+            
+        </a-marker>
+
         
-        <div class="controles">
-            <button id="ar-button">VER EN MI MESA</button>
-        </div>
-    </model-viewer>
-
-    <script>
-        const modelViewer = document.querySelector('#visor');
-        const btn = document.querySelector('#ar-button');
-
-        // Al pulsar el botón, forzamos la entrada a Realidad Aumentada
-        btn.addEventListener('click', () => {
-            if (modelViewer.canActivateAR) {
-                modelViewer.activateAR();
-            } else {
-                alert("Tu móvil no soporta Realidad Aumentada nativa.");
-            }
-        });
-    </script>
+    </a-scene>
 </body>
 </html>
