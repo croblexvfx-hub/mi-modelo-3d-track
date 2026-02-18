@@ -3,19 +3,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Plato AR Tracked</title>
+    <title>AR Plato Tracked</title>
+    <!-- Librerías de confianza para tracking de imagen -->
     <script src="https://aframe.io"></script>
     <script src="https://raw.githack.com"></script>
     <style>
-        .arjs-loader { height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: black; z-index: 9999; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; }
-        #start-button { margin-top: 20px; padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .arjs-loader { height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: black; z-index: 9999; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
+        #start-button { margin-top: 20px; padding: 15px 30px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 
 <body style="margin: 0px; overflow: hidden;">
+    <!-- Pantalla de carga y permiso de cámara -->
     <div id="loader" class="arjs-loader">
-        <div>Cargando motor de Realidad Aumentada...</div>
-        <button id="start-button">INICIAR CÁMARA</button>
+        <div>Cargando modelo 3D...</div>
+        <button id="start-button">INICIAR EXPERIENCIA</button>
     </div>
 
     <a-scene
@@ -24,7 +26,7 @@
         embedded
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
 
-        <!-- NFT: Apuntamos al nombre base de tus archivos (qr) sin extensión -->
+        <!-- NFT: Aquí es donde he puesto 'QRtest' que vincula tus 3 archivos -->
         <a-nft
             type="nft"
             url="https://croblexvfx-hub.github.io"
@@ -33,7 +35,7 @@
             smoothTolerance=".01"
             smoothThreshold="5">
             
-            <!-- Tu modelo Plato_01.glb -->
+            <!-- Tu modelo Plato_01.glb con escala ajustada para NFT -->
             
             
         </a-nft>
