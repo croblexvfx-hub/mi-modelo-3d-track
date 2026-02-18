@@ -1,25 +1,30 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Librerías de motor 3D y Tracking -->
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-  </head>
-  <body>
-    <!-- Escena configurada para buscar tu archivo .mind -->
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-      <a-assets>
-        <!-- Cargamos tu modelo 3D -->
-        <a-asset-item id="modeloPlato" src="Plato_01.glb"></a-asset-item>
-      </a-assets>
+    <head>
+        <title>AR Plato Tracking</title>
+        <!-- Cargamos A-Frame y AR.js para tracking de marcadores -->
+        <script src="https://aframe.io"></script>
+        <script src="https://raw.githack.com"></script>
+    </head>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <body style="margin: 0px; overflow: hidden;">
+        <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+            
+            <a-assets>
+                <a-asset-item id="plato" src="Plato_01.glb"></a-asset-item>
+            </a-assets>
 
-      <!-- El modelo aparecerá sobre el QR (index 0 porque es la primera imagen del archivo .mind) -->
-      
-        <!-- Puedes ajustar 'scale' si el plato se ve muy grande o pequeño -->
-        <a-gltf-model src="#modeloPlato" rotation="0 0 0" position="0 0 0" scale="1 1 1"></a-gltf-model>
-      
-    </a-scene>
-  </body>
+            <!-- Este es el 'ancla'. Cuando la cámara vea el marcador HIRO, mostrará el modelo -->
+            <a-marker preset="hiro">
+                
+                
+            </a-marker>
+
+            <!-- Iluminación para que los materiales se vean bien -->
+            
+            
+
+            
+        </a-scene>
+    </body>
 </html>
