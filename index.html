@@ -3,35 +3,33 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>AR Plato Tracked</title>
-    <!-- Usamos versiones específicas que sabemos que no fallan en móviles -->
+    <title>AR Plato Final</title>
+    <!-- Versiones ultra-estables -->
     <script src="https://aframe.io"></script>
     <script src="https://raw.githack.com"></script>
-    
     <style>
-        .arjs-loader { height: 100%; width: 100%; position: absolute; top: 0; left: 0; background-color: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; font-family: sans-serif; }
-        #start-button { margin-top: 20px; padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; font-weight: bold; }
+        .arjs-loader { position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; }
+        #btn { padding: 20px; background: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; z-index: 1000; }
+        body { background: red; } /* Si ves rojo, la cámara no ha cargado */
     </style>
 </head>
 
-<body style="margin: 0px; overflow: hidden;">
-    <!-- Pantalla de carga -->
+<body style="margin: 0; overflow: hidden;">
     <div id="loader" class="arjs-loader">
-        <div id="status">Cargando motor AR...</div>
-        <button id="start-button">ACTIVAR CÁMARA Y MODELO</button>
+        <button id="btn">ACTIVAR CÁMARA Y PLATO</button>
+        <p id="txt" style="margin-top: 10px;">Esperando permiso...</p>
     </div>
 
-    <!-- La escena AR -->
     <a-scene
         vr-mode-ui="enabled: false;"
-        renderer="logarithmicDepthBuffer: true; colorManagement: true; antialias: true;"
+        renderer="logarithmicDepthBuffer: true; colorManagement: true;"
         embedded
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
 
-        <!-- AQUÍ ESTÁ EL CAMBIO: La ruta con 'QRtest' al final -->
+        <!-- RUTA CORREGIDA: Verifica que tus archivos se llamen QRtest.fset, etc. -->
         <a-nft
             type="nft"
-            url="https://croblexvfx-hub.github.io/QRtest"
+            url="https://croblexvfx-hub.github.io"
             smooth="true"
             smoothCount="10"
             smoothTolerance=".01"
@@ -45,24 +43,11 @@
     </a-scene>
 
     <script>
-        const btn = document.getElementById('start-button');
-        const loader = document.getElementById('loader');
-        
-        btn.addEventListener('click', function() {
-            // Esto fuerza al navegador a pedir permiso de cámara si no lo ha hecho
+        document.getElementById('btn').addEventListener('click', function() {
+            document.getElementById('loader').style.display = 'none';
+            // Forzamos el encendido manual por si el navegador lo bloquea
             const scene = document.querySelector('a-scene');
-            scene.addEventListener('loaded', () => {
-                console.log('Escena cargada');
-            });
-            
-            // Ocultamos el cargador
-            loader.style.display = 'none';
-            
-            // Forzamos el inicio del video en iOS/Android
-            const video = document.querySelector('video');
-            if (video) {
-                video.play();
-            }
+            scene.enterVR(); // Algunos navegadores necesitan este trigger
         });
     </script>
 </body>
