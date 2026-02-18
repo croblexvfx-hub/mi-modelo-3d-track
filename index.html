@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Visor Plato 3D</title>
+    <!-- Cargamos las librerías en orden clásico para máxima compatibilidad -->
+    <script src="https://cdnjs.cloudflare.com"></script>
+    <script src="https://cdn.jsdelivr.net"></script>
     <style>
         body { margin: 0; overflow: hidden; background: #000; font-family: sans-serif; }
         #btn { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
@@ -17,59 +20,59 @@
     <button id="btn">VER PLATO 3D</button>
     <video id="v" autoplay playsinline></video>
 
-    <!-- Cargamos Three.js como módulo para evitar el error "is not defined" -->
-    <script type="module">
-        import * as THREE from 'https://cdn.skypack.dev';
-        import { GLTFLoader } from 'https://cdn.skypack.dev/examples/jsm/loaders/GLTFLoader.js';
-
+    <script>
         const btn = document.getElementById('btn');
         const video = document.getElementById('v');
 
-        btn.onclick = async () => {
+        btn.onclick = async function() {
+            // Verificamos si THREE se cargó antes de nada
+            if (typeof THREE === 'undefined') {
+                alert("Error: Las librerías 3D no han cargado aún. Espera 2 segundos y pulsa de nuevo.");
+                return;
+            }
+
             try {
-                // 1. Activar Cámara
+                // 1. Activar Cámara (Lo que ya te funcionó)
                 const stream = await navigator.mediaDevices.getUserMedia({ 
                     video: { facingMode: 'environment' } 
                 });
                 video.srcObject = stream;
                 btn.style.display = 'none';
 
-                // 2. Escena 3D
+                // 2. Escena 3D con Three.js
                 const scene = new THREE.Scene();
                 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
                 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(window.devicePixelRatio);
                 document.body.appendChild(renderer.domElement);
 
-                // Luces potentes para ver bien las texturas
-                const light = new THREE.AmbientLight(0xffffff, 1);
-                scene.add(light);
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(0, 1, 1);
-                scene.add(directionalLight);
+                // Luz ambiental para materiales
+                scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+                const sun = new THREE.DirectionalLight(0xffffff, 0.6);
+                sun.position.set(1, 1, 1);
+                scene.add(sun);
 
-                // 3. Carga del modelo
-                const loader = new GLTFLoader();
-                loader.load('Plato_01.glb', (gltf) => {
+                // 3. Cargar el modelo
+                const loader = new THREE.GLTFLoader();
+                // Ruta relativa directa al archivo en tu GitHub
+                loader.load('Plato_01.glb', function(gltf) {
                     const model = gltf.scene;
-                    // Ajustamos posición para que aparezca frente a la cámara
-                    model.position.set(0, -0.5, -2); 
-                    model.scale.set(1, 1, 1);
+                    model.position.set(0, -0.5, -2.5); // Frente a la cámara
+                    model.scale.set(1.5, 1.5, 1.5);
                     scene.add(model);
                     
-                    const animate = () => {
+                    function animate() {
                         requestAnimationFrame(animate);
-                        model.rotation.y += 0.01; // El plato girará suavemente
+                        model.rotation.y += 0.01;
                         renderer.render(scene, camera);
-                    };
+                    }
                     animate();
-                }, undefined, (error) => {
-                    alert("Error cargando el archivo GLB: " + error);
+                }, undefined, function(error) {
+                    alert("Error cargando GLB: " + error.message);
                 });
 
             } catch (err) {
-                alert("Error de cámara o permisos: " + err);
+                alert("Error de cámara: " + err);
             }
         };
     </script>
